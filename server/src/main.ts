@@ -27,7 +27,12 @@ export class RedisIoAdapter extends IoAdapter {
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
 
-  const whitelist = ['https://react-socket-io-webrtc-client.herokuapp.com/'];
+  const whitelist = [
+    'http://localhost:8080/',
+    'http://localhost:3000/',
+    'http://localhost:3001/',
+    'http://localhost:19006/',
+  ];
 
   const corsOptionsDelegate = function (req, callback) {
     let corsOptions;
