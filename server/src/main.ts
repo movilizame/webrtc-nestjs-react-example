@@ -9,7 +9,7 @@ import * as helmet from 'helmet';
 export class RedisIoAdapter extends IoAdapter {
   createIOServer(port: number): any {
     const server = super.createIOServer(port);
-    const redisAdapter = redisIoAdapter({
+    /* const redisAdapter = redisIoAdapter({
       host: process.env.REDIS_HOST,
       port: process.env.REDIS_PORT,
       auth_pass: process.env.REDIS_PASSWORD,
@@ -19,7 +19,7 @@ export class RedisIoAdapter extends IoAdapter {
       console.error('adapter error: ', err);
     });
 
-    server.adapter(redisAdapter);
+    server.adapter(redisAdapter); */
     return server;
   }
 }
