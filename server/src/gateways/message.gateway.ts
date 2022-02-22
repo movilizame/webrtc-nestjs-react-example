@@ -62,6 +62,16 @@ export class MessageGateway implements OnGatewayInit, OnGatewayDisconnect {
     });
   }
 
+  @SubscribeMessage('candidate')
+  public iceCandidate(client: Socket, data: any): void {
+    console.log(data);
+    
+    client.to(data.user).emit('candidate', {
+      user: client.id,
+      candidate: data.candidate,
+    });
+  }
+
   @SubscribeMessage('reject-call')
   public rejectCall(client: Socket, data: any): void {
     client.to(data.from).emit('call-rejected', {

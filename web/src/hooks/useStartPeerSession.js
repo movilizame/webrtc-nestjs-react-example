@@ -32,6 +32,8 @@ export const useStartPeerSession = (room, userMediaStream, localVideoRef) => {
         }
       });
 
+      peerVideoConnection.onNewIceCandidate((user,candidate) => peerVideoConnection.newIceCandidate(user,candidate));
+      
       peerVideoConnection.onAnswerMade((socket) => peerVideoConnection.callUser(socket));
     }
 

@@ -1,6 +1,6 @@
 import * as io from 'socket.io-client';
 
-const { RTCPeerConnection, RTCSessionDescription } = window;
+const { RTCPeerConnection, RTCSessionDescription, RTCIceCandidate } = window;
 
 function capitalizeFirstLetter(string) {
   return string.charAt(0).toUpperCase() + string.slice(1);
@@ -38,6 +38,18 @@ class PeerConnectionSession {
     this.peerConnections[id].ontrack = function ({ streams: [stream] }) {
       console.log({ id, stream });
       callback(stream);
+    };
+
+    const emitIceCandidate = (id, candidate) => {
+      this.socket.emit('candidate', {user: id, candidate: candidate});
+    }
+
+    this.peerConnections[id].onicecandidate = function (event) {
+      // console.log({ id, _stream });
+      console.log("new ice candidate");
+      if(event.candidate){
+        emitIceCandidate(id,event.candidate)
+      }
     };
 
     console.log(this.peerConnections);
@@ -115,6 +127,14 @@ class PeerConnectionSession {
     this.socket.close();
     this.senders = [];
     Object.keys(this.peerConnections).forEach(this.removePeerConnection.bind(this));
+  }
+
+  onNewIceCandidate(callback) {
+    this.socket.on('candidate', (response) => callback(response.user, response.candidate))
+  }
+
+  newIceCandidate(user, candidate) {
+    this.peerConnections[user].addIceCandidate(new RTCIceCandidate(candidate))
   }
 }
 
